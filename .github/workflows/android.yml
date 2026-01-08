@@ -1,0 +1,34 @@
+name: Build Strategy2560 APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y python3-pip python3-dev build-essential git zlib1g-dev
+        pip install buildozer==1.5.0
+
+    - name: Build APK
+      run: |
+        buildozer -v android debug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: Strategy2560-debug.apk
+        path: bin/*.apk
