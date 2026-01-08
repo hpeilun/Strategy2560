@@ -2,16 +2,11 @@
 title = Strategy2560
 package.name = strategy2560
 package.domain = org.strategy
-source.dir = .
-source.include_exts = py,csv
 
 version = 1.0
 
-requirements = python3,kivy,pandas,numpy,matplotlib
+source.include_exts = py,kv,png,jpg,ttf
 
-orientation = portrait
-fullscreen = 0
+requirements = python3,kivy,numpy,pandas,yfinance,requests
 
-android.api = 33
-android.minapi = 21
-android.arch = arm64-v8a
+android.permissions = INTERNET
