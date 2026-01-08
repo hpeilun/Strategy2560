@@ -1,21 +1,36 @@
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
-import pandas as pd
-from indicators import EMA
-from strategy2560 import strategy_2560
-from chart import build_chart
+from kivy.uix.label import Label
+from kivy.clock import Clock
+
+from realtime import get_realtime
+
+
+class StrategyApp(BoxLayout):
+
+    def __init__(self, **kwargs):
+        super().__init__(orientation="vertical", **kwargs)
+
+        self.label = Label(text="載入中...", font_size=24)
+        self.add_widget(self.label)
+
+        # 第一次載入
+        self.update_data(0)
+
+        # ⭐ 每 60 秒自動刷新（可改）
+        Clock.schedule_interval(self.update_data, 60)
+
+    def update_data(self, dt):
+        df = get_realtime("BTC-USD")
+
+        last_close = df["close"].iloc[-1]
+        self.label.text = f"BTC 即時價格\n{last_close}"
+
 
 class Strategy2560App(App):
     def build(self):
-        df = pd.read_csv("data.csv")
-        df["ema5"] = EMA(df["close"], 5)
-        df["ema25"] = EMA(df["close"], 25)
-        df["ema60"] = EMA(df["close"], 60)
+        return StrategyApp()
 
-        signals = strategy_2560(df)
 
-        layout = BoxLayout()
-        layout.add_widget(build_chart(df, signals))
-        return layout
-
-Strategy2560App().run()
+if __name__ == "__main__":
+    Strategy2560App().run()
