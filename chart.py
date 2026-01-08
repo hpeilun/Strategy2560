@@ -1,15 +1,18 @@
+import matplotlib
+matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
-from kivy.garden.matplotlib.backend_kivyagg import FigureCanvasKivyAgg
+from io import BytesIO
 
-def build_chart(df, signals):
-    fig, ax = plt.subplots()
-
+def draw_chart(df):
+    fig, ax = plt.subplots(figsize=(5,3))
     ax.plot(df["close"], label="Close")
-    ax.plot(df["ema25"], label="EMA25")
-    ax.plot(df["ema60"], label="EMA60")
-
-    for s in signals:
-        ax.scatter(s[1], s[2], color="green" if s[0]=="BUY" else "red")
-
     ax.legend()
-    return FigureCanvasKivyAgg(fig)
+
+    buf = BytesIO()
+    plt.tight_layout()
+    fig.savefig(buf, format="png")
+    plt.close(fig)
+    buf.seek(0)
+
+    return buf
