@@ -5,8 +5,10 @@ package.domain = org.strategy
 
 version = 1.0
 
-source.include_exts = py,kv,png,jpg,ttf
+source.include_exts = py,png,jpg,kv
 
-requirements = python3,kivy,numpy,pandas,yfinance,requests
+requirements = python3,kivy,numpy,pandas,matplotlib,yfinance,requests
 
 android.permissions = INTERNET
+
+orientation = portrait
