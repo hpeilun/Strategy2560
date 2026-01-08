@@ -1,6 +1,6 @@
 import pandas as pd
 
-def get_realtime(symbol="BTC-USD", period="5d", interval="5m"):
+def get_realtime(symbol="BTC-USD", period="1d", interval="5m"):
     try:
         import yfinance as yf
 
@@ -22,5 +22,16 @@ def get_realtime(symbol="BTC-USD", period="5d", interval="5m"):
         return df
 
     except Exception as e:
-        # ⭐ 打包或沒網路時用「假資料」撐住
+        print("Using mock data:", e)
         return mock_data()
+
+
+def mock_data():
+    data = {
+        "open":  [100,101,102,103,104],
+        "high":  [101,102,103,104,105],
+        "low":   [99,100,101,102,103],
+        "close": [100,102,101,104,105],
+        "volume":[10,12,11,13,15]
+    }
+    return pd.DataFrame(data)
